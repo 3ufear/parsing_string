@@ -1,7 +1,7 @@
 
 use strict;
-
-my $str = '{bbb {"qwe"}, ccc [1,"{52}","3"], ddd:"asd sdbfkjd ehrjqgewvj,sadfnlksdf.,", aaa {qqq},fff: "qwewer", ccc: sss }';
+use warnings;
+my $str = '{bbb {"qwe"}, ccc [1,"]]{52}","3"], ddd:"asd sdbfkjd ehrj[[[qgewvj,sadfnlksdf.,", aaa {qqq},fff: "qwewer", ccc: sss }';
 
 sub parse_str {
 	my $str = shift;
@@ -37,6 +37,7 @@ sub parse_str {
                  	$string = '';
                  	$f_in_close_quotes = 0;
                  	$f_in_quotes = 0;
+                 	next;
                  } elsif (($el eq ',' || $el eq ']' || $el eq '}') && $#array_1 != -1 ) {
 
                  	$f_in_close_quotes = 0;
