@@ -1,29 +1,33 @@
-
+#!/usr/bin/perl
 use strict;
 use warnings;
-my $str = '{bbb {"qwe"}, ccc [1,"]]{52}","3"], ddd:"asd sdbfkjd ehrj[[[qgewvj,sadfnlksdf.,", aaa {qqq},fff: "qwewer", ccc: sss }';
+#my $str = '{bbb {"qwe"}, ccc [1,"]]{52}","3"], ddd:"asd sdbfkjd ehrj[[[qgewvj,sadfnlksdf.,", aaa {qqq},fff: "qwewer", ccc: sss }';
+#my $str = '{bbb {qwe}, ccc [1,2,3], ddd:"asd sdbfkjd ehrjqgewvj,sadfnlksdf.,", fff: qwewer }';
+my $str = "{cc { uids {}, lamp {}}}";
+
+print "Test string => \'$str\'\n\n";
 
 sub parse_str {
-	my $str = shift;
-	my %hash;
-	my @array = split(//, $str);
-	use Data::Dumper;
-	#print Dumper(\@array);
-	my $first = 1;
-	my $f_not_parse = 0;
-	my $f_is_colon = 0;
-	my $f_in_quotes = 0;
-	my $f_in_close_quotes = 0;
-	my $first_time = 0;
-	my @array_1;
-	my @parse_string;
-	my $string;
-	my $error = 0;
-	pop @array;
-	shift @array;
-	foreach my $el (@array) {
-		if ($f_in_quotes) {
-			if ($el eq '"') {
+    my $str = shift;
+    my %hash;
+    my @array = split(//, $str);
+    use Data::Dumper;
+    #print Dumper(\@array);
+    my $first = 1;
+    my $f_not_parse = 0;
+    my $f_is_colon = 0;
+    my $f_in_quotes = 0;
+    my $f_in_close_quotes = 0;
+    my $first_time = 0;
+    my @array_1;
+    my @parse_string;
+    my $string;
+    my $error = 0;
+    pop @array;
+    shift @array;
+    foreach my $el (@array) {
+        if ($f_in_quotes) {
+            if ($el eq '"') {
                  $f_in_close_quotes = 1;
                  $string .= $el;
                  next;
