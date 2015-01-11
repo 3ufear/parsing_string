@@ -1,7 +1,8 @@
 
 use strict;
 use warnings;
-my $str = '{bbb {"qwe"}, ccc [1,"]]{52}","3"]; ddd:"asd sdbfkjd ehrj[[[qgewvj,sadfnlksdf.,"; aaa {qqq},fff: "qwewer", ccc: sss }';
+my $str = 'bbb {}, ccc [1,"]]{52}","3"]; ddd:"asd sdbfkjd ehrj[[[qgewvj,sadfnlksdf.,"; aaa {qqq},fff: "qwewer", ccc:[]';
+$str = ' bbb {}, ccc: {}, ddd: []';
 
 sub parse_str {
 	my $str = shift;
@@ -19,8 +20,6 @@ sub parse_str {
 	my @parse_string;
 	my $string;
 	my $error = 0;
-	pop @array;
-	shift @array;
 	foreach my $el (@array) {
 		if ($f_in_quotes) {
 			if ($el eq '"') {
