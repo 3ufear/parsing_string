@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 #my $str = '{bbb {"qwe"}, ccc [1,"]]{52}","3"], ddd:"asd sdbfkjd ehrj[[[qgewvj,sadfnlksdf.,", aaa {qqq},fff: "qwewer", ccc: sss }';
-my $str = 'bbb {qwe}; ccc [1,2;3]; ddd:"asd sdbfkjd ehrjqgewvj,sadfnlksdf.,", fff: qwewer ';
+my $str = 'bbb {qwe}; ccc [1,2;3];     ddd:"asd sdbfkjd ehrjqgewvj,sadfnlksdf.,",;            fff: qwewer,   ';
 #my $str = "{cc { uids {}, lamp {}}}";
 
 print "Test string => \'$str\'\n\n";
@@ -12,8 +12,6 @@ sub parse_str {
     my $str = shift;
     my %hash;
     my @array = split(//, $str);
-    use Data::Dumper;
-    #print Dumper(\@array);
     my $first = 1;
     my $f_not_parse = 0;
     my $f_is_colon = 0;
@@ -28,16 +26,18 @@ sub parse_str {
         if ($f_in_quotes) {
             if ($el eq '"') {
                  $f_in_close_quotes = 1;
-                 $string .= $el;
+                 $string = add_to_string($string,$el);
                  next;
             }
             if ($f_in_close_quotes) {
                  if ($el eq ' ') {
-                    $string .= $el;
+                 	$string = add_to_string($string,$el);
                     next
                  } elsif (($el eq ',' || $el eq ';')&& $#array_1 == -1 ) {
-                    push @parse_string, $string;
-                    $string = '';
+                    if ($string) {
+                        push @parse_string, $string;
+                        $string = '';
+                    }
                     $f_in_close_quotes = 0;
                     $f_in_quotes = 0;
                     next;
@@ -64,23 +64,25 @@ sub parse_str {
                 }
             } 
             $f_in_close_quotes = 0;
-            $string .= $el;
+            $string = add_to_string($string,$el);
             next;
         }
         if (($el eq ','  || $el eq ';' ) && !$f_not_parse && !$f_in_quotes ) {
-            push @parse_string, $string;
-            $string = '';
+        	if ($string) {
+                push @parse_string, $string;
+                $string = '';
+            }
             next;
              
         }
         if ($el eq '{' or $el eq '[') {
-            $string .= $el;
+        	$string = add_to_string($string,$el);
             $f_not_parse = 1;
             push @array_1, $el;
             next;
         }
         if ($el eq '}' or $el eq ']') {
-            $string .= $el;
+            $string = add_to_string($string,$el);
             my $cur_el = pop @array_1;
             if ($cur_el eq '{') {
                 $cur_el = '}'; 
@@ -98,15 +100,25 @@ sub parse_str {
             next;
         }
         if ($el eq '"') {
-            $string .= $el;
+        	$string = add_to_string($string,$el);
             $f_in_quotes = 1;
             next;
         }
-
-        $string .= $el;
+        $string = add_to_string($string,$el);
     } 
-    push @parse_string, $string;
+    if ($string) {
+        push @parse_string, $string;
+    }
     return $error ? 'error' : \@parse_string;
 }
 
+
+sub add_to_string {
+	my $string = shift;
+	my $el = shift;
+	if ($string || $el ne ' ') {
+         $string .= $el;
+	}
+}
+use Data::Dumper;
 print Dumper(parse_str($str));
