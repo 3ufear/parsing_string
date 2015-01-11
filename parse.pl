@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 #my $str = '{bbb {"qwe"}, ccc [1,"]]{52}","3"], ddd:"asd sdbfkjd ehrj[[[qgewvj,sadfnlksdf.,", aaa {qqq},fff: "qwewer", ccc: sss }';
-my $str = '{bbb {qwe}; ccc [1,2;3]; ddd:"asd sdbfkjd ehrjqgewvj,sadfnlksdf.,", fff: qwewer }';
+my $str = 'bbb {qwe}; ccc [1,2;3]; ddd:"asd sdbfkjd ehrjqgewvj,sadfnlksdf.,", fff: qwewer ';
 #my $str = "{cc { uids {}, lamp {}}}";
 
 print "Test string => \'$str\'\n\n";
@@ -24,8 +24,6 @@ sub parse_str {
     my @parse_string;
     my $string;
     my $error = 0;
-    pop @array;
-    shift @array;
     foreach my $el (@array) {
         if ($f_in_quotes) {
             if ($el eq '"') {
