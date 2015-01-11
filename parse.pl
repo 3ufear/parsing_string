@@ -1,7 +1,7 @@
 
 use strict;
 use warnings;
-my $str = '{bbb {"qwe"}, ccc [1,"]]{52}","3"], ddd:"asd sdbfkjd ehrj[[[qgewvj,sadfnlksdf.,", aaa {qqq},fff: "qwewer", ccc: sss }';
+my $str = '{bbb {"qwe"}, ccc [1,"]]{52}","3"]; ddd:"asd sdbfkjd ehrj[[[qgewvj,sadfnlksdf.,"; aaa {qqq},fff: "qwewer", ccc: sss }';
 
 sub parse_str {
 	my $str = shift;
@@ -32,7 +32,7 @@ sub parse_str {
                  if ($el eq ' ') {
                  	$string .= $el;
                  	next
-                 } elsif ($el eq ',' && $#array_1 == -1 ) {
+                 } elsif (($el eq ',' || $el eq ';')&& $#array_1 == -1 ) {
                  	push @parse_string, $string;
                  	$string = '';
                  	$f_in_close_quotes = 0;
@@ -64,7 +64,7 @@ sub parse_str {
             $string .= $el;
             next;
         }
-        if ($el eq ',' && !$f_not_parse && !$f_in_quotes ) {
+        if (($el eq ','  || $el eq ';' ) && !$f_not_parse && !$f_in_quotes ) {
         	push @parse_string, $string;
             $string = '';
         	next;
